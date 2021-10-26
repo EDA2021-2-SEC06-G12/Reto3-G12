@@ -30,6 +30,8 @@ from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.ADT import orderedmap as om
+import datetime
 assert cf
 
 """
@@ -37,14 +39,91 @@ Se define la estructura de un catálogo de videos. El catálogo tendrá dos list
 los mismos.
 """
 
-# Construccion de modelos
+# INICIALIZACIÓN DE CATÁLOGO
+# Catálogo Vacío
+def newCatalog():
+    catalog = {'UFO': None,
+                'datetime': None
+                }
 
-# Funciones para agregar informacion al catalogo
+    catalog['UFO'] = lt.newList('SINGLE_LINKED')
+    catalog['datetime'] = om.newMap(omaptype='RBT',
+                                      comparefunction=compareDates)
+    return catalog
 
-# Funciones para creacion de datos
+# CARGA DE DATOS AL CATÁLOGO
+def addUFO(catalog, ufo):
+    lt.addLast(catalog['UFO'], ufo)
+    adddatetime(catalog['datetime'], ufo)
+    return catalog
 
-# Funciones de consulta
+def adddatetime(map, ufo):
+    avistamiento = ufo['datetime']
+    fecha_avistamiento = datetime.datetime.strptime(avistamiento, '%Y-%m-%d %H:%M:%S')
+    entry = om.get(map, fecha_avistamiento.date())
+    if entry is None:
+        datentry = newAvistamiento(ufo)
+        om.put(map, fecha_avistamiento.date(), datentry)
+    else:
+        datentry = me.getValue(entry)
+    addAvistamiento(datentry, ufo)
 
-# Funciones utilizadas para comparar elementos dentro de una lista
+    return map
 
-# Funciones de ordenamiento
+def newAvistamiento(ufo):
+
+    entry = {'City': None, 'UFOS': None}
+    entry['City'] = mp.newMap(numelements=30,
+                                     maptype='CHAINING',
+                                     comparefunction=compareCity)
+    entry['UFOS'] = lt.newList('SINGLE_LINKED', compareDates)
+
+    return entry
+
+def addAvistamiento(datentry, ufo):
+    lst = datentry['UFOS']
+    lt.addLast(lst, ufo)
+    City = datentry['City']
+    Citentry = mp.get(City, ufo['city'])
+    if (Citentry is None):
+        entry = newCityEntry(ufo['city'], ufo)
+        lt.addLast(entry['UFOS'], ufo)
+        mp.put(City, ufo['city'], entry)
+    else:
+        entry = me.getValue(Citentry)
+        lt.addLast(entry['UFOS'], ufo)
+    return datentry
+
+def newCityEntry(offensegrp, crime):
+    CTentry = {'City': None, 'UFOS': None}
+    CTentry['City'] = offensegrp
+    CTentry['UFOS'] = lt.newList('SINGLE_LINKED', compareCity)
+    return CTentry
+
+# FUNCIONES DE COMPARACIÓN
+def compareDates(date1, date2):
+    if (date1 == date2):
+        return 0
+    elif (date1 > date2):
+        return 1
+    else:
+        return -1
+
+def compareCity(City1, City2):
+    City = me.getKey(City2)
+    if (City1 == City):
+        return 0
+    elif (City1 > City):
+        return 1
+    else:
+        return -1
+
+# FUNCIONES ADICIONALES
+def AvistamientosSize(catalog):
+    return lt.size(catalog['UFO'])
+
+def indexHeight(catalog):
+    return om.height(catalog['datetime'])
+
+def indexSize(catalog):
+    return om.size(catalog['datetime'])
