@@ -44,6 +44,11 @@ def loadUFOS(catalog):
     for ufo in input_file:
         model.addUFO(catalog, ufo)
 
+# REQUERIMIENTO 1 (CONTAR LOS AVISTAMIENTOS EN UNA CIUDAD)
+def AvistamientosCiudad(ciudad, catalog):
+    Algoritmo = model.AvistamientosCiudad(ciudad, catalog)
+    return Algoritmo
+
 # FUNCIONES ADICIONALES
 def AvistamientosSize(catalog):
     return model.AvistamientosSize(catalog)

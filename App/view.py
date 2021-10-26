@@ -64,6 +64,11 @@ while True:
         print("Avistamientos cargados:", str(controller.AvistamientosSize(cont)), '\n')
         print("Altura del arbol:", str(controller.indexHeight(cont)), '\n')
         print("Elementos en el arbol:", str(controller.indexSize(cont)), '\n')
+    
+    elif int(inputs[0]) == 3:
+        ciudad = input('Ingrese la ciudad a consultar: ')
+        Algoritmo = controller.AvistamientosCiudad(ciudad, cont)
+        print(Algoritmo)
 
     else:
         sys.exit(0)

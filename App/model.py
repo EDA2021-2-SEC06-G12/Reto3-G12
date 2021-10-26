@@ -74,7 +74,7 @@ def newAvistamiento(ufo):
 
     entry = {'City': None, 'UFOS': None}
     entry['City'] = mp.newMap(numelements=30,
-                                     maptype='CHAINING',
+                                     maptype='PROBING',
                                      comparefunction=compareCity)
     entry['UFOS'] = lt.newList('SINGLE_LINKED', compareDates)
 
@@ -99,6 +99,12 @@ def newCityEntry(offensegrp, crime):
     CTentry['City'] = offensegrp
     CTentry['UFOS'] = lt.newList('SINGLE_LINKED', compareCity)
     return CTentry
+
+# REQUERIMIENTO 1 (CONTAR LOS AVISTAMIENTOS EN UNA CIUDAD)
+def AvistamientosCiudad(ciudad, catalog):
+    valores = om.valueSet(catalog['datetime'])
+
+
 
 # FUNCIONES DE COMPARACIÓN
 def compareDates(date1, date2):
