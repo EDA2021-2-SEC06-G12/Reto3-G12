@@ -49,12 +49,15 @@ def newCatalog():
     catalog['UFO'] = lt.newList('SINGLE_LINKED')
     catalog['datetime'] = om.newMap(omaptype='RBT',
                                       comparefunction=compareDates)
+    catalog['duration (seconds)'] = om.newMap(omaptype='RBT',
+                                      comparefunction=compareDates)                                  
     return catalog
 
 # CARGA DE DATOS AL CATÁLOGO
 def addUFO(catalog, ufo):
     lt.addLast(catalog['UFO'], ufo)
     adddatetime(catalog['datetime'], ufo)
+    addsecondtime(catalog['duration (seconds)'], ufo)
     return catalog
 
 def adddatetime(map, ufo):
@@ -69,6 +72,21 @@ def adddatetime(map, ufo):
     addAvistamiento(datentry, ufo)
 
     return map
+
+#Requerimiento 2
+def addsecondtime(map, ufo):
+    avistamiento = ufo['duration (seconds)']
+    second_avistamiento = avistamiento
+    entry = om.get(map,second_avistamiento)
+    if entry is None:
+        secentry = newAvistamiento(ufo)
+        om.put(map, second_avistamiento, secentry)
+    else:
+        secentry = me.getValue(entry)
+    addAvistamiento(secentry, ufo)
+
+    return map
+
 
 def newAvistamiento(ufo):
 
@@ -123,6 +141,22 @@ def AvistamientosCiudad(ciudad, catalog):
     return cuantos, primeros_3['elements'], ultimos_3['elements']
 
 # REQUERIMIENTO 2 (CONTAR LOS AVISTAMIENTOS POR DURACIÓN)(INDIVIDUAL - D.Parra)
+def avistamientosRangosec(S_min,S_max, catalog):
+    #S_min=datetime.time.second(S_min)
+    #S_max=datetime.time.second(S_max)
+    datos = lt.newList('ARRAY_LIST')
+    cuantos = 0
+    rango = om.values(catalog['duration (seconds)'],S_min, S_max)
+    for avistamiento in lt.iterator(rango):
+        avist = avistamiento['UFOS']
+        data = avist['first']['info']
+        lt.addLast(datos, data)
+        cuantos += lt.size(avistamiento['UFOS'])
+    
+    primeros_3 = lt.subList(datos, 1, 3)
+    ultimos_3 = lt.subList(datos, lt.size(datos) - 2, 3)
+
+    return cuantos, primeros_3['elements'], ultimos_3['elements']
 
 
 # REQUERIMIENTO 3 (CONTAR LOS AVISTAMIENTOS POR HORA/MINUTOS DEL DÍA)(INDIVIDUAL - J.Ahumada)

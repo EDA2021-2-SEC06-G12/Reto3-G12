@@ -66,14 +66,20 @@ while True:
         print("Elementos en el arbol:", str(controller.indexSize(cont)), "\n")
     
     elif int(inputs[0]) == 3:
-        ciudad = input('Ingrese la ciudad a consultar: ')
+        ciudad = input('Ingrese la ciudad a consultar: ')#las vegas
         Algoritmo = controller.AvistamientosCiudad(ciudad, cont)
         print("\nEn la ciudad de", ciudad + ",", "hay un total de", Algoritmo[0], "avistamientos.\n")
         print("Los primeros 3 avistamientos en", ciudad, "son:\n", Algoritmo[1])
         print("\nLos últimos 3 avistamientos en", ciudad, "son:\n", Algoritmo[2], "\n")
     
     elif int(inputs[0]) == 4:#INDIVIDUAL 1
-        print("INSERTAR FUNCIÓN")
+        S_min=input('Ingresa los segundos minimos: ') #30.0
+        S_max= input('Ingresa los segundos mayores: ') #150.0
+        Algoritmo = controller.avistamientosRangosec(S_min,S_max, cont)
+        print("\nDentro del rango especificado, hay un total de", Algoritmo[0], "avistamientos.\n")
+        print("Los primeros 3 avistamientos son:\n", Algoritmo[1])
+        print("\nLos últimos 3 avistamientos son:\n", Algoritmo[2], "\n")
+        
     
     elif int(inputs[0]) == 5:#INDIVIDUAL 2
         print("INSERTAR FUNCIÓN")

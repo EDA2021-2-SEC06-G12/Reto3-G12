@@ -50,7 +50,9 @@ def AvistamientosCiudad(ciudad, catalog):
     return Algoritmo
 
 # REQUERIMIENTO 2 (CONTAR LOS AVISTAMIENTOS POR DURACIÓN)
-
+def avistamientosRangosec(S_min,S_max, catalog):
+    Algoritmo = model.avistamientosRangosec(S_min,S_max, catalog)
+    return Algoritmo
 
 # REQUERIMIENTO 3 (CONTAR LOS AVISTAMIENTOS POR HORA/MINUTOS DEL DÍA)
 
