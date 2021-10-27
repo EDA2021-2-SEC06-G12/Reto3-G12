@@ -55,7 +55,9 @@ def avistamientosRangosec(S_min,S_max, catalog):
     return Algoritmo
 
 # REQUERIMIENTO 3 (CONTAR LOS AVISTAMIENTOS POR HORA/MINUTOS DEL DÍA)
-
+def AvistamientosPorHora(H_I, H_FN, catalog):
+    Algoritmo = model.AvistamientosPorHora(H_I, H_FN, catalog)
+    return Algoritmo
 
 # REQUERIMIENTO 4 (CONTAR LOS AVISTAMIENTOS EN UN RANGO DE FECHAS)
 def AvistamientosRangoFechas(F_I, F_FN, catalog):

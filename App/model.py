@@ -87,7 +87,6 @@ def addsecondtime(map, ufo):
 
     return map
 
-
 def newAvistamiento(ufo):
 
     entry = {'City': None, 'UFOS': None}
@@ -160,7 +159,29 @@ def avistamientosRangosec(S_min,S_max, catalog):
 
 
 # REQUERIMIENTO 3 (CONTAR LOS AVISTAMIENTOS POR HORA/MINUTOS DEL DÍA)(INDIVIDUAL - J.Ahumada)
+def AvistamientosPorHora(H_I, H_FN, catalog):
+    H_I = datetime.datetime.strptime(H_I, '%H:%M:%S')
+    H_FN = datetime.datetime.strptime(H_FN, '%H:%M:%S')
+    datos = lt.newList('ARRAY_LIST')
+    valores = om.keySet(catalog['datetime'])
+    for i in lt.iterator(valores):
+        fecha = om.get(catalog['datetime'], i)
+        if fecha['key'] is not None:
+            mapcity = me.getValue(fecha)['City']
+            city = mp.valueSet(mapcity)
+            for j in lt.iterator(city):
+                avist = j['UFOS']['first']['info']
+                hora = datetime.datetime.strptime(avist['datetime'], '%Y-%m-%d %H:%M:%S')
+                if hora.time() >= H_I.time() and hora.time() <= H_FN.time():
+                    data = avist
+                    lt.addLast(datos, data)
+    
+    cuantos = lt.size(datos)
 
+    primeros_3 = lt.subList(datos, 1, 3)
+    ultimos_3 = lt.subList(datos, lt.size(datos) - 2, 3)
+
+    return cuantos, primeros_3['elements'], ultimos_3['elements']
 
 # REQUERIMIENTO 4 (CONTAR LOS AVISTAMIENTOS EN UN RANGO DE FECHAS)
 def AvistamientosRangoFechas(F_I, F_FN, catalog):

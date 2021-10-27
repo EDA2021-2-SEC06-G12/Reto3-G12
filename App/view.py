@@ -82,7 +82,15 @@ while True:
         
     
     elif int(inputs[0]) == 5:#INDIVIDUAL 2
-        print("INSERTAR FUNCIÓN")
+        H_I = input('Ingresa la hora inicial (HH:MM): ')#20:45
+        H_I = H_I + ':00'
+        H_FN = input('Ingresa la hora final (HH:MM): ')#23:15
+        H_FN = H_FN + ':00'
+        Algoritmo = controller.AvistamientosPorHora(H_I, H_FN, cont)
+        print("\nDentro del rango especificado, hay un total de", Algoritmo[0], "avistamientos.\n")
+        print("Los primeros 3 avistamientos son:\n", Algoritmo[1])
+        print("\nLos últimos 3 avistamientos son:\n", Algoritmo[2], "\n")
+
     
     elif int(inputs[0]) == 6:
         F_I = input('Ingresa la fecha inicial (AAAA-MM-DD): ')#1945-08-06
