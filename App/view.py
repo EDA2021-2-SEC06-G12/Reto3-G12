@@ -101,7 +101,12 @@ while True:
         print("\nLos últimos 3 avistamientos son:\n", Algoritmo[2], "\n")
     
     elif int(inputs[0]) == 7:
-        print("INSERTAR FUNCIÓN")
+        L_I = input('Ingresa la longitud inicial: ')
+        L_FN = input('Ingresa la longitud final: ')
+        LT_I = input('Ingresa la latitud inicial: ')
+        LT_FN = input('Ingresa la latitud final: ')
+        Algoritmo = controller.AvistamientosZona(L_I, L_FN, LT_I, LT_FN, cont)
+        print(Algoritmo)
 
     else:
         sys.exit(0)

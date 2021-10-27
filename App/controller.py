@@ -65,6 +65,9 @@ def AvistamientosRangoFechas(F_I, F_FN, catalog):
     return Algoritmo
 
 # REQUERIMIENTO 5 (CONTAR LOS AVISTAMIENTOS DE UNA ZONA GEOGRÁFICA)
+def AvistamientosZona(L_I, L_FN, LT_I, LT_FN, catalog):
+    Algoritmo = model.AvistamientosZona(L_I, L_FN, LT_I, LT_FN, catalog)
+    return Algoritmo
 
 # FUNCIONES ADICIONALES
 def AvistamientosSize(catalog):

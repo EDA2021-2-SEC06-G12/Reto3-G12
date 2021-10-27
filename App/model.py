@@ -49,8 +49,9 @@ def newCatalog():
     catalog['UFO'] = lt.newList('SINGLE_LINKED')
     catalog['datetime'] = om.newMap(omaptype='RBT',
                                       comparefunction=compareDates)
+
     catalog['duration (seconds)'] = om.newMap(omaptype='RBT',
-                                      comparefunction=compareDates)                                  
+                                      comparefunction=compareDates)
     return catalog
 
 # CARGA DE DATOS AL CATÁLOGO
@@ -201,9 +202,10 @@ def AvistamientosRangoFechas(F_I, F_FN, catalog):
 
     return cuantos, primeros_3['elements'], ultimos_3['elements']
 
-
 # REQUERIMIENTO 5 (CONTAR LOS AVISTAMIENTOS DE UNA ZONA GEOGRÁFICA)
-
+def AvistamientosZona(L_I, L_FN, LT_I, LT_FN, catalog):
+    datos = lt.newList('ARRAY_LIST')
+    cuantos = 0
 
 # FUNCIONES DE COMPARACIÓN
 def compareDates(date1, date2):
