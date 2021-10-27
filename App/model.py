@@ -130,14 +130,21 @@ def AvistamientosCiudad(ciudad, catalog):
 
 # REQUERIMIENTO 4 (CONTAR LOS AVISTAMIENTOS EN UN RANGO DE FECHAS)
 def AvistamientosRangoFechas(F_I, F_FN, catalog):
+    F_I = datetime.datetime.strptime(F_I, '%Y-%m-%d')
+    F_FN = datetime.datetime.strptime(F_FN, '%Y-%m-%d')
     datos = lt.newList('ARRAY_LIST')
     cuantos = 0
-    rango = om.values(catalog['datetime'], F_I, F_FN)
+    rango = om.values(catalog['datetime'], F_I.date(), F_FN.date())
     for avistamiento in lt.iterator(rango):
-        print(avistamiento)
+        avist = avistamiento['UFOS']
+        data = avist['first']['info']
+        lt.addLast(datos, data)
         cuantos += lt.size(avistamiento['UFOS'])
     
-    return cuantos
+    primeros_3 = lt.subList(datos, 1, 3)
+    ultimos_3 = lt.subList(datos, lt.size(datos) - 2, 3)
+
+    return cuantos, primeros_3['elements'], ultimos_3['elements']
 
 
 # REQUERIMIENTO 5 (CONTAR LOS AVISTAMIENTOS DE UNA ZONA GEOGRÁFICA)

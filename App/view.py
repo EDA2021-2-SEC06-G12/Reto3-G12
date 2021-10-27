@@ -82,7 +82,9 @@ while True:
         F_I = input('Ingresa la fecha inicial (AAAA-MM-DD): ')#1945-08-06
         F_FN = input('Ingresa la fecha final (AAAA-MM-DD): ')#1984-11-15
         Algoritmo = controller.AvistamientosRangoFechas(F_I, F_FN, cont)
-        print(Algoritmo)
+        print("\nDentro del rango especificado, hay un total de", Algoritmo[0], "avistamientos.\n")
+        print("Los primeros 3 avistamientos son:\n", Algoritmo[1])
+        print("\nLos últimos 3 avistamientos son:\n", Algoritmo[2], "\n")
     
     elif int(inputs[0]) == 7:
         print("INSERTAR FUNCIÓN")
