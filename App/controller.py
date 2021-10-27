@@ -78,4 +78,3 @@ def indexHeight(catalog):
 
 def indexSize(catalog):
     return model.indexSize(catalog)
-
