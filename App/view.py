@@ -61,14 +61,31 @@ while True:
     elif int(inputs[0]) == 2:
         print("Cargando información de los archivos ....\n")
         controller.loadData(cont)
-        print("Avistamientos cargados:", str(controller.AvistamientosSize(cont)), '\n')
-        print("Altura del arbol:", str(controller.indexHeight(cont)), '\n')
-        print("Elementos en el arbol:", str(controller.indexSize(cont)), '\n')
+        print("Avistamientos cargados:", str(controller.AvistamientosSize(cont)), "\n")
+        print("Altura del arbol:", str(controller.indexHeight(cont)), "\n")
+        print("Elementos en el arbol:", str(controller.indexSize(cont)), "\n")
     
     elif int(inputs[0]) == 3:
         ciudad = input('Ingrese la ciudad a consultar: ')
         Algoritmo = controller.AvistamientosCiudad(ciudad, cont)
+        print("\nEn la ciudad de", ciudad + ",", "hay un total de", Algoritmo[0], "avistamientos.\n")
+        print("Los primeros 3 avistamientos en", ciudad, "son:\n", Algoritmo[1])
+        print("\nLos últimos 3 avistamientos en", ciudad, "son:\n", Algoritmo[2], "\n")
+    
+    elif int(inputs[0]) == 4:#INDIVIDUAL 1
+        print("INSERTAR FUNCIÓN")
+    
+    elif int(inputs[0]) == 5:#INDIVIDUAL 2
+        print("INSERTAR FUNCIÓN")
+    
+    elif int(inputs[0]) == 6:
+        F_I = input('Ingresa la fecha inicial (AAAA-MM-DD): ')#1945-08-06
+        F_FN = input('Ingresa la fecha final (AAAA-MM-DD): ')#1984-11-15
+        Algoritmo = controller.AvistamientosRangoFechas(F_I, F_FN, cont)
         print(Algoritmo)
+    
+    elif int(inputs[0]) == 7:
+        print("INSERTAR FUNCIÓN")
 
     else:
         sys.exit(0)

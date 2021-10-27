@@ -102,8 +102,45 @@ def newCityEntry(offensegrp, crime):
 
 # REQUERIMIENTO 1 (CONTAR LOS AVISTAMIENTOS EN UNA CIUDAD)
 def AvistamientosCiudad(ciudad, catalog):
-    valores = om.valueSet(catalog['datetime'])
+    datos = lt.newList('ARRAY_LIST')
+    cuantos = 0
+    valores = om.keySet(catalog['datetime'])
+    for i in lt.iterator(valores):
+        fecha = om.get(catalog['datetime'], i)
+        if fecha['key'] is not None:
+            mapcity = me.getValue(fecha)['City']
+            city = mp.get(mapcity, ciudad)
+            if city is not None:
+                avist = me.getValue(city)['UFOS']
+                avistamientos = mp.size(avist)
+                cuantos += avistamientos
+                data = avist['first']['info']
+                lt.addLast(datos, data)
+    
+    primeros_3 = lt.subList(datos, 1, 3)
+    ultimos_3 = lt.subList(datos, lt.size(datos) - 2, 3)
+    
+    return cuantos, primeros_3['elements'], ultimos_3['elements']
 
+# REQUERIMIENTO 2 (CONTAR LOS AVISTAMIENTOS POR DURACIÓN)(INDIVIDUAL - D.Parra)
+
+
+# REQUERIMIENTO 3 (CONTAR LOS AVISTAMIENTOS POR HORA/MINUTOS DEL DÍA)(INDIVIDUAL - J.Ahumada)
+
+
+# REQUERIMIENTO 4 (CONTAR LOS AVISTAMIENTOS EN UN RANGO DE FECHAS)
+def AvistamientosRangoFechas(F_I, F_FN, catalog):
+    datos = lt.newList('ARRAY_LIST')
+    cuantos = 0
+    rango = om.values(catalog['datetime'], F_I, F_FN)
+    for avistamiento in lt.iterator(rango):
+        print(avistamiento)
+        cuantos += lt.size(avistamiento['UFOS'])
+    
+    return cuantos
+
+
+# REQUERIMIENTO 5 (CONTAR LOS AVISTAMIENTOS DE UNA ZONA GEOGRÁFICA)
 
 
 # FUNCIONES DE COMPARACIÓN

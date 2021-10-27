@@ -49,6 +49,19 @@ def AvistamientosCiudad(ciudad, catalog):
     Algoritmo = model.AvistamientosCiudad(ciudad, catalog)
     return Algoritmo
 
+# REQUERIMIENTO 2 (CONTAR LOS AVISTAMIENTOS POR DURACIÓN)
+
+
+# REQUERIMIENTO 3 (CONTAR LOS AVISTAMIENTOS POR HORA/MINUTOS DEL DÍA)
+
+
+# REQUERIMIENTO 4 (CONTAR LOS AVISTAMIENTOS EN UN RANGO DE FECHAS)
+def AvistamientosRangoFechas(F_I, F_FN, catalog):
+    Algoritmo = model.AvistamientosRangoFechas(F_I, F_FN, catalog)
+    return Algoritmo
+
+# REQUERIMIENTO 5 (CONTAR LOS AVISTAMIENTOS DE UNA ZONA GEOGRÁFICA)
+
 # FUNCIONES ADICIONALES
 def AvistamientosSize(catalog):
     return model.AvistamientosSize(catalog)
