@@ -234,3 +234,5 @@ def indexHeight(catalog):
 
 def indexSize(catalog):
     return om.size(catalog['datetime'])
+
+    
