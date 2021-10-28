@@ -140,7 +140,7 @@ def AvistamientosCiudad(ciudad, catalog):
     
     return cuantos, primeros_3['elements'], ultimos_3['elements']
 
-# REQUERIMIENTO 2 (CONTAR LOS AVISTAMIENTOS POR DURACIÓN)(INDIVIDUAL - D.Parra)
+# REQUERIMIENTO 2 (CONTAR LOS AVISTAMIENTOS POR DURACIÓN)
 def avistamientosRangosec(S_min,S_max, catalog):
     datos = lt.newList('ARRAY_LIST')
     valores = om.keySet(catalog['datetime'])
@@ -164,7 +164,7 @@ def avistamientosRangosec(S_min,S_max, catalog):
     return cuantos, primeros_3['elements'], ultimos_3['elements']
 
 
-# REQUERIMIENTO 3 (CONTAR LOS AVISTAMIENTOS POR HORA/MINUTOS DEL DÍA)(INDIVIDUAL - J.Ahumada)
+# REQUERIMIENTO 3 (CONTAR LOS AVISTAMIENTOS POR HORA/MINUTOS DEL DÍA)
 def AvistamientosPorHora(H_I, H_FN, catalog):
     H_I = datetime.datetime.strptime(H_I, '%H:%M:%S')
     H_FN = datetime.datetime.strptime(H_FN, '%H:%M:%S')
