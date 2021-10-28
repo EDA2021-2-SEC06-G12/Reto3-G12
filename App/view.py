@@ -107,9 +107,8 @@ while True:
         LT_FN = input('Ingresa la latitud final: ')#37.00
         Algoritmo = controller.AvistamientosZona(L_I, L_FN, LT_I, LT_FN, cont)
         print("\nDentro del rango especificado, hay un total de", Algoritmo[0], "avistamientos.\n")
-        #print("Los primeros 3 avistamientos son:\n", Algoritmo[1])
-        #print("\nLos últimos 3 avistamientos son:\n", Algoritmo[2], "\n")
-        print(Algoritmo)
+        print("Los primeros 5 avistamientos son:\n", Algoritmo[1])
+        print("\nLos últimos 5 avistamientos son:\n", Algoritmo[2], "\n")
 
     else:
         sys.exit(0)

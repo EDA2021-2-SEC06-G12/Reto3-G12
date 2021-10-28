@@ -255,12 +255,10 @@ def AvistamientosZona(L_I, L_FN, LT_I, LT_FN, catalog):
     
     cuantos = lt.size(datos)
 
-    primeros_3 = lt.subList(datos, 1, 3)
-    ultimos_3 = lt.subList(datos, lt.size(datos) - 2, 3)
+    primeros_3 = lt.subList(datos, 1, 5)
+    ultimos_3 = lt.subList(datos, lt.size(datos) - 4, 5)
 
-    #cuantos, primeros_3['elements'], ultimos_3['elements']
-    
-    return cuantos, datos['elements']
+    return cuantos, primeros_3['elements'], ultimos_3['elements']
 
 # FUNCIONES DE COMPARACIÓN
 def compareDates(date1, date2):
