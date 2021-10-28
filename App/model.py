@@ -142,17 +142,22 @@ def AvistamientosCiudad(ciudad, catalog):
 
 # REQUERIMIENTO 2 (CONTAR LOS AVISTAMIENTOS POR DURACIÓN)(INDIVIDUAL - D.Parra)
 def avistamientosRangosec(S_min,S_max, catalog):
-    #S_min=datetime.time.second(S_min)
-    #S_max=datetime.time.second(S_max)
     datos = lt.newList('ARRAY_LIST')
-    cuantos = 0
-    rango = om.values(catalog['duration (seconds)'],S_min, S_max)
-    for avistamiento in lt.iterator(rango):
-        avist = avistamiento['UFOS']
-        data = avist['first']['info']
-        lt.addLast(datos, data)
-        cuantos += lt.size(avistamiento['UFOS'])
+    valores = om.keySet(catalog['datetime'])
+    for i in lt.iterator(valores):
+        fecha = om.get(catalog['datetime'], i)
+        if fecha['key'] is not None:
+            mapcity = me.getValue(fecha)['City']
+            city = mp.valueSet(mapcity)
+            for j in lt.iterator(city):
+                avist = j['UFOS']['first']['info']
+                dur = avist['duration (seconds)']
+                if float(dur) >= float(S_min) and float(dur) <= float(S_max):
+                    data = avist
+                    lt.addLast(datos, data)
     
+    cuantos = lt.size(datos)
+
     primeros_3 = lt.subList(datos, 1, 3)
     ultimos_3 = lt.subList(datos, lt.size(datos) - 2, 3)
 
