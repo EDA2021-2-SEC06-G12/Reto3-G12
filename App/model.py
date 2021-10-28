@@ -43,11 +43,14 @@ los mismos.
 # Catálogo Vacío
 def newCatalog():
     catalog = {'UFO': None,
-                'datetime': None
-                }
+                'datetime': None,
+                'Longitud': None}
 
     catalog['UFO'] = lt.newList('SINGLE_LINKED')
     catalog['datetime'] = om.newMap(omaptype='RBT',
+                                      comparefunction=compareDates)
+    
+    catalog['Longitud'] = om.newMap(omaptype='RBT',
                                       comparefunction=compareDates)
 
     return catalog
@@ -56,6 +59,7 @@ def newCatalog():
 def addUFO(catalog, ufo):
     lt.addLast(catalog['UFO'], ufo)
     adddatetime(catalog['datetime'], ufo)
+    addLongitud(catalog['Longitud'], ufo)
     return catalog
 
 def adddatetime(map, ufo):
@@ -98,6 +102,49 @@ def addAvistamiento(datentry, ufo):
 def newCityEntry(offensegrp, crime):
     CTentry = {'City': None, 'UFOS': None}
     CTentry['City'] = offensegrp
+    CTentry['UFOS'] = lt.newList('SINGLE_LINKED', compareCity)
+    return CTentry
+
+#Requerimiento 5
+def addLongitud(map, ufo):
+    avistamiento = float(ufo['longitude'])
+    avistamiento = round(avistamiento, 3)
+    entry = om.get(map, avistamiento)
+    if entry is None:
+        datentry = newAvistamientoL(ufo)
+        om.put(map, avistamiento, datentry)
+    else:
+        datentry = me.getValue(entry)
+    addAvistamientoL(datentry, ufo)
+    return map
+
+def newAvistamientoL(ufo):
+
+    entry = {'Lat': None, 'UFOS': None}
+    entry['Lat'] = mp.newMap(numelements=30,
+                                     maptype='PROBING',
+                                     comparefunction=compareCity)
+    entry['UFOS'] = lt.newList('SINGLE_LINKED', compareDates)
+
+    return entry
+
+def addAvistamientoL(datentry, ufo):
+    lst = datentry['UFOS']
+    lt.addLast(lst, ufo)
+    City = datentry['Lat']
+    Citentry = mp.get(City, round(float(ufo['latitude']), 3))
+    if (Citentry is None):
+        entry = newLatEntry(round(float(ufo['latitude']), 3), ufo)
+        lt.addLast(entry['UFOS'], ufo)
+        mp.put(City, round(float(ufo['latitude']), 3), entry)
+    else:
+        entry = me.getValue(Citentry)
+        lt.addLast(entry['UFOS'], ufo)
+    return datentry
+
+def newLatEntry(offensegrp, crime):
+    CTentry = {'Lat': None, 'UFOS': None}
+    CTentry['Lat'] = offensegrp
     CTentry['UFOS'] = lt.newList('SINGLE_LINKED', compareCity)
     return CTentry
 
@@ -192,7 +239,28 @@ def AvistamientosRangoFechas(F_I, F_FN, catalog):
 # REQUERIMIENTO 5 (CONTAR LOS AVISTAMIENTOS DE UNA ZONA GEOGRÁFICA)
 def AvistamientosZona(L_I, L_FN, LT_I, LT_FN, catalog):
     datos = lt.newList('ARRAY_LIST')
-    cuantos = 0
+    valores = om.keySet(catalog['Longitud'])
+    for i in lt.iterator(valores):
+        if i <= float(L_I) and i >= float(L_FN):
+            Long = om.get(catalog['Longitud'], i)
+            if Long['key'] is not None:
+                mapLat = me.getValue(Long)['Lat']
+                Lat = mp.keySet(mapLat)
+                for j in lt.iterator(Lat):
+                    if j >= float(LT_I) and j <= float(LT_FN):
+                        Lati = mp.get(mapLat, j)
+                        Lati = me.getValue(Lati)
+                        for data in lt.iterator(Lati['UFOS']):
+                            lt.addLast(datos, data)
+    
+    cuantos = lt.size(datos)
+
+    primeros_3 = lt.subList(datos, 1, 3)
+    ultimos_3 = lt.subList(datos, lt.size(datos) - 2, 3)
+
+    #cuantos, primeros_3['elements'], ultimos_3['elements']
+    
+    return cuantos, datos['elements']
 
 # FUNCIONES DE COMPARACIÓN
 def compareDates(date1, date2):

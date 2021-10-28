@@ -101,11 +101,14 @@ while True:
         print("\nLos últimos 3 avistamientos son:\n", Algoritmo[2], "\n")
     
     elif int(inputs[0]) == 7:
-        L_I = input('Ingresa la longitud inicial: ')
-        L_FN = input('Ingresa la longitud final: ')
-        LT_I = input('Ingresa la latitud inicial: ')
-        LT_FN = input('Ingresa la latitud final: ')
+        L_I = input('Ingresa la longitud inicial: ')#-103.00
+        L_FN = input('Ingresa la longitud final: ')#-109.05
+        LT_I = input('Ingresa la latitud inicial: ')#31.33
+        LT_FN = input('Ingresa la latitud final: ')#37.00
         Algoritmo = controller.AvistamientosZona(L_I, L_FN, LT_I, LT_FN, cont)
+        print("\nDentro del rango especificado, hay un total de", Algoritmo[0], "avistamientos.\n")
+        #print("Los primeros 3 avistamientos son:\n", Algoritmo[1])
+        #print("\nLos últimos 3 avistamientos son:\n", Algoritmo[2], "\n")
         print(Algoritmo)
 
     else:
