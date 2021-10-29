@@ -24,7 +24,6 @@ import config as cf
 import model
 import csv
 
-
 """
 El controlador se encarga de mediar entre la vista y el modelo.
 """
@@ -67,6 +66,11 @@ def AvistamientosRangoFechas(F_I, F_FN, catalog):
 # REQUERIMIENTO 5 (CONTAR LOS AVISTAMIENTOS DE UNA ZONA GEOGRÁFICA)
 def AvistamientosZona(L_I, L_FN, LT_I, LT_FN, catalog):
     Algoritmo = model.AvistamientosZona(L_I, L_FN, LT_I, LT_FN, catalog)
+    return Algoritmo
+
+# REQUERIMIENTO 6 (VISUALIZAR LOS AVISTAMIENTOS DE UNA ZONA GEOGRÁFICA)
+def AvistamientosGeo(L_I, L_FN, LT_I, LT_FN, catalog):
+    Algoritmo = model.AvistamientosGeo(L_I, L_FN, LT_I, LT_FN, catalog)
     return Algoritmo
 
 # FUNCIONES ADICIONALES

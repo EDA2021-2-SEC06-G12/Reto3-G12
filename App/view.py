@@ -24,7 +24,6 @@ import config as cf
 import sys
 import controller
 from DISClib.ADT import list as lt
-from DISClib.ADT import orderedmap as om
 assert cf
 
 
@@ -116,7 +115,8 @@ while True:
         L_FN = input('Ingresa la longitud final: ')#-109.05
         LT_I = input('Ingresa la latitud inicial: ')#31.33
         LT_FN = input('Ingresa la latitud final: ')#37.00
-        Algoritmo = controller.AvistamientosZona(L_I, L_FN, LT_I, LT_FN, cont)
+        Algoritmo = controller.AvistamientosGeo(L_I, L_FN, LT_I, LT_FN, cont)
+        Algoritmo
 
     else:
         sys.exit(0)

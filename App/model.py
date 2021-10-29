@@ -61,6 +61,7 @@ def addUFO(catalog, ufo):
     lt.addLast(catalog['UFO'], ufo)
     adddatetime(catalog['datetime'], ufo)
     addLongitud(catalog['Longitud'], ufo)
+    
     return catalog
 
 def adddatetime(map, ufo):
@@ -259,9 +260,19 @@ def AvistamientosZona(L_I, L_FN, LT_I, LT_FN, catalog):
     primeros_3 = lt.subList(datos, 1, 5)
     ultimos_3 = lt.subList(datos, lt.size(datos) - 4, 5)
 
-    return cuantos, primeros_3['elements'], ultimos_3['elements']
+    return cuantos, primeros_3['elements'], ultimos_3['elements'], datos
 
 # REQUERIMIENTO 6 (VISUALIZAR LOS AVISTAMIENTOS DE UNA ZONA GEOGRÁFICA)
+def AvistamientosGeo(L_I, L_FN, LT_I, LT_FN, catalog):
+    avistamientos = AvistamientosZona(L_I, L_FN, LT_I, LT_FN, catalog)
+    datos = avistamientos[3]
+    mapa = folium.Map()
+    tooltip = '¡Click para ver las coordenadas!'
+    for i in lt.iterator(datos):
+        coordenadas = ('latitud:', i['latitude']), ('longitud:', i['longitude'])
+        folium.Marker([i['latitude'], i['longitude']], tooltip=tooltip,
+                        popup=coordenadas).add_to(mapa)
+    mapa.save('Avistamientos en la zona.html')
 
 
 # FUNCIONES DE COMPARACIÓN
