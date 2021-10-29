@@ -44,6 +44,7 @@ def printMenu():
     print("5- Contar avistamientos por Hora/Minutos del día")
     print("6- Contar los avistamientos en un rango de fechas")
     print("7- Contar los avistamientos de una Zona Geográfica")
+    print("8- Visualizar los avistamientos de una zona geográfica")
     print("0- Salir del Menu")
 
 """
@@ -109,6 +110,13 @@ while True:
         print("\nDentro del rango especificado, hay un total de", Algoritmo[0], "avistamientos.\n")
         print("Los primeros 5 avistamientos son:\n", Algoritmo[1])
         print("\nLos últimos 5 avistamientos son:\n", Algoritmo[2], "\n")
+    
+    elif int(inputs[0]) == 8:
+        L_I = input('Ingresa la longitud inicial: ')#-103.00
+        L_FN = input('Ingresa la longitud final: ')#-109.05
+        LT_I = input('Ingresa la latitud inicial: ')#31.33
+        LT_FN = input('Ingresa la latitud final: ')#37.00
+        Algoritmo = controller.AvistamientosZona(L_I, L_FN, LT_I, LT_FN, cont)
 
     else:
         sys.exit(0)

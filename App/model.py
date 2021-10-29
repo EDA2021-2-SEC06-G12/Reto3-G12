@@ -31,6 +31,7 @@ from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.ADT import orderedmap as om
+import folium
 import datetime
 assert cf
 
@@ -259,6 +260,9 @@ def AvistamientosZona(L_I, L_FN, LT_I, LT_FN, catalog):
     ultimos_3 = lt.subList(datos, lt.size(datos) - 4, 5)
 
     return cuantos, primeros_3['elements'], ultimos_3['elements']
+
+# REQUERIMIENTO 6 (VISUALIZAR LOS AVISTAMIENTOS DE UNA ZONA GEOGRÁFICA)
+
 
 # FUNCIONES DE COMPARACIÓN
 def compareDates(date1, date2):
