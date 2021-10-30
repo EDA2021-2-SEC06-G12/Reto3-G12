@@ -32,7 +32,7 @@ from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.ADT import orderedmap as om
-#import folium
+import folium
 import datetime
 assert cf
 
@@ -308,7 +308,7 @@ def AvistamientosZona(L_I, L_FN, LT_I, LT_FN, catalog):
     return cuantos, primeros_5['elements'], ultimos_5['elements'], primeros_5, ultimos_5
 
 # REQUERIMIENTO 6 (VISUALIZAR LOS AVISTAMIENTOS DE UNA ZONA GEOGRÁFICA)
-'''def AvistamientosGeo(L_I, L_FN, LT_I, LT_FN, catalog):
+def AvistamientosGeo(L_I, L_FN, LT_I, LT_FN, catalog):
     avistamientos = AvistamientosZona(L_I, L_FN, LT_I, LT_FN, catalog)
     primeros_5 = avistamientos[3]
     ultimos_5 = avistamientos[4]
@@ -322,7 +322,7 @@ def AvistamientosZona(L_I, L_FN, LT_I, LT_FN, catalog):
         coordenadas = ('latitud:', j['latitude']), ('longitud:', j['longitude'])
         folium.Marker([j['latitude'], j['longitude']], tooltip=tooltip,
                         popup=coordenadas).add_to(mapa)
-    mapa.save('Avistamientos en la zona.html')'''
+    mapa.save('Avistamientos en la zona.html')
 
 
 # FUNCIONES DE COMPARACIÓN
