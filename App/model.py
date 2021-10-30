@@ -25,13 +25,14 @@
  """
 
 
+from DISClib.DataStructures.bstnode import getValue
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.ADT import orderedmap as om
-import folium
+#import folium
 import datetime
 assert cf
 
@@ -51,7 +52,13 @@ def newCatalog():
     catalog['datetime'] = om.newMap(omaptype='RBT',
                                       comparefunction=compareDates)
     
-    catalog['Longitud'] = om.newMap(omaptype='RBT',
+    catalog['time'] = om.newMap(omaptype='RBT',
+                                      comparefunction=compareDates)
+    
+    catalog['Latitud'] = om.newMap(omaptype='RBT',
+                                      comparefunction=compareDates)
+
+    catalog['Duration'] = om.newMap(omaptype='RBT',
                                       comparefunction=compareDates)
 
     return catalog
@@ -60,8 +67,9 @@ def newCatalog():
 def addUFO(catalog, ufo):
     lt.addLast(catalog['UFO'], ufo)
     adddatetime(catalog['datetime'], ufo)
-    addLongitud(catalog['Longitud'], ufo)
-    
+    addDuration(catalog['Duration'], ufo)
+    addtime(catalog['time'], ufo)
+    addLatitud(catalog['Latitud'], ufo)
     return catalog
 
 def adddatetime(map, ufo):
@@ -74,15 +82,13 @@ def adddatetime(map, ufo):
     else:
         datentry = me.getValue(entry)
     addAvistamiento(datentry, ufo)
-
     return map
 
 def newAvistamiento(ufo):
 
     entry = {'City': None, 'UFOS': None}
-    entry['City'] = mp.newMap(numelements=30,
-                                     maptype='PROBING',
-                                     comparefunction=compareCity)
+    entry['City'] = om.newMap(omaptype='RBT',
+                                      comparefunction=compareDates)
     entry['UFOS'] = lt.newList('SINGLE_LINKED', compareDates)
 
     return entry
@@ -91,11 +97,11 @@ def addAvistamiento(datentry, ufo):
     lst = datentry['UFOS']
     lt.addLast(lst, ufo)
     City = datentry['City']
-    Citentry = mp.get(City, ufo['city'])
+    Citentry = om.get(City, ufo['city'])
     if (Citentry is None):
         entry = newCityEntry(ufo['city'], ufo)
         lt.addLast(entry['UFOS'], ufo)
-        mp.put(City, ufo['city'], entry)
+        om.put(City, ufo['city'], entry)
     else:
         entry = me.getValue(Citentry)
         lt.addLast(entry['UFOS'], ufo)
@@ -107,9 +113,63 @@ def newCityEntry(offensegrp, crime):
     CTentry['UFOS'] = lt.newList('SINGLE_LINKED', compareCity)
     return CTentry
 
+#Requerimiento 2
+def addDuration(map, ufo):
+    avistamiento = ufo['duration (seconds)']
+    entry = om.get(map, float(avistamiento))
+    if entry is None:
+        datentry = newAvistamiento(ufo)
+        om.put(map, float(avistamiento), datentry)
+    else:
+        datentry = me.getValue(entry)
+    addAvistamiento(datentry, ufo)
+    return map
+
+#Requerimiento 3
+def addtime(map, ufo):
+    avistamiento = ufo['datetime']
+    fecha_avistamiento = datetime.datetime.strptime(avistamiento, '%Y-%m-%d %H:%M:%S')
+    entry = om.get(map, fecha_avistamiento.time())
+    if entry is None:
+        datentry = newAvist(ufo)
+        om.put(map, fecha_avistamiento.time(), datentry)
+    else:
+        datentry = me.getValue(entry)
+    addAvist(datentry, ufo)
+    return map
+
+def newAvist(ufo):
+    entry = {'Date': None, 'UFOS': None}
+    entry['Date'] = om.newMap(omaptype='RBT',
+                                      comparefunction=compareDates)
+    entry['UFOS'] = lt.newList('SINGLE_LINKED', compareDates)
+    return entry
+
+def addAvist(datentry, ufo):
+    lst = datentry['UFOS']
+    lt.addLast(lst, ufo)
+    avistamiento = ufo['datetime']
+    fecha_avistamiento = datetime.datetime.strptime(avistamiento, '%Y-%m-%d %H:%M:%S')
+    Date = datentry['Date']
+    Datentry = om.get(Date, fecha_avistamiento.date())
+    if (Datentry is None):
+        entry = newDateEntry(fecha_avistamiento.date(), ufo)
+        lt.addLast(entry['UFOS'], ufo)
+        om.put(Date, fecha_avistamiento.date(), entry)
+    else:
+        entry = me.getValue(Datentry)
+        lt.addLast(entry['UFOS'], ufo)
+    return datentry
+
+def newDateEntry(offensegrp, crime):
+    DTentry = {'Date': None, 'UFOS': None}
+    DTentry['Date'] = offensegrp
+    DTentry['UFOS'] = lt.newList('SINGLE_LINKED', compareCity)
+    return DTentry
+
 #Requerimiento 5
-def addLongitud(map, ufo):
-    avistamiento = float(ufo['longitude'])
+def addLatitud(map, ufo):
+    avistamiento = float(ufo['latitude'])
     avistamiento = round(avistamiento, 3)
     entry = om.get(map, avistamiento)
     if entry is None:
@@ -122,8 +182,8 @@ def addLongitud(map, ufo):
 
 def newAvistamientoL(ufo):
 
-    entry = {'Lat': None, 'UFOS': None}
-    entry['Lat'] = mp.newMap(numelements=30,
+    entry = {'Long': None, 'UFOS': None}
+    entry['Long'] = mp.newMap(numelements=30,
                                      maptype='PROBING',
                                      comparefunction=compareCity)
     entry['UFOS'] = lt.newList('SINGLE_LINKED', compareDates)
@@ -133,20 +193,20 @@ def newAvistamientoL(ufo):
 def addAvistamientoL(datentry, ufo):
     lst = datentry['UFOS']
     lt.addLast(lst, ufo)
-    City = datentry['Lat']
-    Citentry = mp.get(City, round(float(ufo['latitude']), 3))
+    City = datentry['Long']
+    Citentry = mp.get(City, round(float(ufo['longitude']), 3))
     if (Citentry is None):
-        entry = newLatEntry(round(float(ufo['latitude']), 3), ufo)
+        entry = newLatEntry(round(float(ufo['longitude']), 3), ufo)
         lt.addLast(entry['UFOS'], ufo)
-        mp.put(City, round(float(ufo['latitude']), 3), entry)
+        mp.put(City, round(float(ufo['longitude']), 3), entry)
     else:
         entry = me.getValue(Citentry)
         lt.addLast(entry['UFOS'], ufo)
     return datentry
 
 def newLatEntry(offensegrp, crime):
-    CTentry = {'Lat': None, 'UFOS': None}
-    CTentry['Lat'] = offensegrp
+    CTentry = {'Long': None, 'UFOS': None}
+    CTentry['Long'] = offensegrp
     CTentry['UFOS'] = lt.newList('SINGLE_LINKED', compareCity)
     return CTentry
 
@@ -157,15 +217,14 @@ def AvistamientosCiudad(ciudad, catalog):
     valores = om.keySet(catalog['datetime'])
     for i in lt.iterator(valores):
         fecha = om.get(catalog['datetime'], i)
-        if fecha['key'] is not None:
-            mapcity = me.getValue(fecha)['City']
-            city = mp.get(mapcity, ciudad)
-            if city is not None:
-                avist = me.getValue(city)['UFOS']
-                avistamientos = mp.size(avist)
-                cuantos += avistamientos
-                data = avist['first']['info']
-                lt.addLast(datos, data)
+        mapcity = me.getValue(fecha)['City']
+        city = om.get(mapcity, ciudad)
+        if city is not None:
+            avist = me.getValue(city)['UFOS']
+            avistamientos = lt.size(avist)
+            cuantos += avistamientos
+            data = avist['first']['info']
+            lt.addLast(datos, data)
     
     primeros_3 = lt.subList(datos, 1, 3)
     ultimos_3 = lt.subList(datos, lt.size(datos) - 2, 3)
@@ -174,51 +233,41 @@ def AvistamientosCiudad(ciudad, catalog):
 
 # REQUERIMIENTO 2 (CONTAR LOS AVISTAMIENTOS POR DURACIÓN)
 def avistamientosRangosec(S_min, S_max, catalog):
+    maxima_d = om.maxKey(catalog['Duration'])
     datos = lt.newList('ARRAY_LIST')
-    valores = om.keySet(catalog['datetime'])
-    for i in lt.iterator(valores):
-        fecha = om.get(catalog['datetime'], i)
-        if fecha['key'] is not None:
-            mapcity = me.getValue(fecha)['City']
-            city = mp.valueSet(mapcity)
-            for j in lt.iterator(city):
-                avist = j['UFOS']['first']['info']
-                dur = avist['duration (seconds)']
-                if float(dur) >= float(S_min) and float(dur) <= float(S_max):
-                    data = avist
-                    lt.addLast(datos, data)
+    rango = om.values(catalog['Duration'], float(S_min), float(S_max))
+    for i in lt.iterator(rango):
+        valores = om.valueSet(i['City'])
+        for j in lt.iterator(valores):
+            for data in lt.iterator(j['UFOS']):
+                lt.addLast(datos, data)
     
     cuantos = lt.size(datos)
 
     primeros_3 = lt.subList(datos, 1, 3)
     ultimos_3 = lt.subList(datos, lt.size(datos) - 2, 3)
 
-    return cuantos, primeros_3['elements'], ultimos_3['elements']
+    return cuantos, primeros_3['elements'], ultimos_3['elements'], maxima_d
 
 # REQUERIMIENTO 3 (CONTAR LOS AVISTAMIENTOS POR HORA/MINUTOS DEL DÍA)
 def AvistamientosPorHora(H_I, H_FN, catalog):
+    maxima_h = om.maxKey(catalog['time'])
     H_I = datetime.datetime.strptime(H_I, '%H:%M:%S')
     H_FN = datetime.datetime.strptime(H_FN, '%H:%M:%S')
     datos = lt.newList('ARRAY_LIST')
-    valores = om.keySet(catalog['datetime'])
-    for i in lt.iterator(valores):
-        fecha = om.get(catalog['datetime'], i)
-        if fecha['key'] is not None:
-            mapcity = me.getValue(fecha)['City']
-            city = mp.valueSet(mapcity)
-            for j in lt.iterator(city):
-                avist = j['UFOS']['first']['info']
-                hora = datetime.datetime.strptime(avist['datetime'], '%Y-%m-%d %H:%M:%S')
-                if hora.time() >= H_I.time() and hora.time() <= H_FN.time():
-                    data = avist
-                    lt.addLast(datos, data)
-    
+    rango = om.values(catalog['time'], H_I.time(), H_FN.time())
+    for i in lt.iterator(rango):
+        valores = om.valueSet(i['Date'])
+        for j in lt.iterator(valores):
+            for data in lt.iterator(j['UFOS']):
+                lt.addLast(datos, data)
+
     cuantos = lt.size(datos)
 
     primeros_3 = lt.subList(datos, 1, 3)
     ultimos_3 = lt.subList(datos, lt.size(datos) - 2, 3)
 
-    return cuantos, primeros_3['elements'], ultimos_3['elements']
+    return cuantos, primeros_3['elements'], ultimos_3['elements'], maxima_h
 
 # REQUERIMIENTO 4 (CONTAR LOS AVISTAMIENTOS EN UN RANGO DE FECHAS)
 def AvistamientosRangoFechas(F_I, F_FN, catalog):
@@ -241,38 +290,39 @@ def AvistamientosRangoFechas(F_I, F_FN, catalog):
 # REQUERIMIENTO 5 (CONTAR LOS AVISTAMIENTOS DE UNA ZONA GEOGRÁFICA)
 def AvistamientosZona(L_I, L_FN, LT_I, LT_FN, catalog):
     datos = lt.newList('ARRAY_LIST')
-    valores = om.keySet(catalog['Longitud'])
-    for i in lt.iterator(valores):
-        if i <= float(L_I) and i >= float(L_FN):
-            Long = om.get(catalog['Longitud'], i)
-            if Long['key'] is not None:
-                mapLat = me.getValue(Long)['Lat']
-                Lat = mp.keySet(mapLat)
-                for j in lt.iterator(Lat):
-                    if j >= float(LT_I) and j <= float(LT_FN):
-                        Lati = mp.get(mapLat, j)
-                        Lati = me.getValue(Lati)
-                        for data in lt.iterator(Lati['UFOS']):
-                            lt.addLast(datos, data)
+    rango = om.values(catalog['Latitud'], float(LT_I), float(LT_FN))
+    for i in lt.iterator(rango):
+        Long = mp.keySet(i['Long'])
+        for j in lt.iterator(Long):
+            if j <= float(L_I) and j >= float(L_FN):
+                avista = mp.get(i['Long'], j)
+                avi = me.getValue(avista)
+                for data in lt.iterator(avi['UFOS']):
+                    lt.addLast(datos, data)
     
     cuantos = lt.size(datos)
 
-    primeros_3 = lt.subList(datos, 1, 5)
-    ultimos_3 = lt.subList(datos, lt.size(datos) - 4, 5)
+    primeros_5 = lt.subList(datos, 1, 5)
+    ultimos_5 = lt.subList(datos, lt.size(datos) - 4, 5)
 
-    return cuantos, primeros_3['elements'], ultimos_3['elements'], datos
+    return cuantos, primeros_5['elements'], ultimos_5['elements'], primeros_5, ultimos_5
 
 # REQUERIMIENTO 6 (VISUALIZAR LOS AVISTAMIENTOS DE UNA ZONA GEOGRÁFICA)
-def AvistamientosGeo(L_I, L_FN, LT_I, LT_FN, catalog):
+'''def AvistamientosGeo(L_I, L_FN, LT_I, LT_FN, catalog):
     avistamientos = AvistamientosZona(L_I, L_FN, LT_I, LT_FN, catalog)
-    datos = avistamientos[3]
+    primeros_5 = avistamientos[3]
+    ultimos_5 = avistamientos[4]
     mapa = folium.Map()
     tooltip = '¡Click para ver las coordenadas!'
-    for i in lt.iterator(datos):
+    for i in lt.iterator(primeros_5):
         coordenadas = ('latitud:', i['latitude']), ('longitud:', i['longitude'])
         folium.Marker([i['latitude'], i['longitude']], tooltip=tooltip,
                         popup=coordenadas).add_to(mapa)
-    mapa.save('Avistamientos en la zona.html')
+    for j in lt.iterator(ultimos_5):
+        coordenadas = ('latitud:', j['latitude']), ('longitud:', j['longitude'])
+        folium.Marker([j['latitude'], j['longitude']], tooltip=tooltip,
+                        popup=coordenadas).add_to(mapa)
+    mapa.save('Avistamientos en la zona.html')'''
 
 
 # FUNCIONES DE COMPARACIÓN
